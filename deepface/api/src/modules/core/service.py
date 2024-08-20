@@ -86,3 +86,31 @@ def analyze(
     except Exception as err:
         tb_str = traceback.format_exc()
         return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
+
+
+def find(
+        img_path: str, 
+        db_path: str, 
+        model_name: str, 
+        detector_backend: str, 
+        distance_metric: str,
+        enforce_detection: bool,
+        align: bool,
+        anti_spoofing: bool,
+        ):
+    try:
+        obj = DeepFace.find(
+            img_path=img_path,
+            db_path=db_path,
+            model_name=model_name,
+            detector_backend=detector_backend,
+            distance_metric=distance_metric,
+            enforce_detection=enforce_detection,
+            align=align,
+            anti_spoofing=anti_spoofing,
+        )
+        return obj
+    except Exception as err:
+        tb_str = traceback.format_exc()
+        return {"error": f"Exception while finding: {str(err)} - {tb_str}"}, 400
+    

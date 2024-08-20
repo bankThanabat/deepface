@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+import pandas as pd
 from deepface import DeepFace
 from deepface.api.src.modules.core import service
 from deepface.commons.logger import Logger
@@ -94,3 +95,32 @@ def analyze():
     logger.debug(demographies)
 
     return demographies
+
+@blueprint.route("/find", methods=["POST"])
+def find():
+    input_args = request.get_json()
+
+    if input_args is None:
+        return {"message": "empty input set passed"}
+
+    img_path = input_args.get("img") or input_args.get("img_path")
+    if img_path is None:
+        return {"message": "you must pass img_path input"}
+
+    find = service.find(
+        img_path=img_path,
+        db_path=input_args.get("db_path"),
+        model_name=input_args.get("model_name", "Facenet"),
+        detector_backend=input_args.get("detector_backend", "mtcnn"),
+        distance_metric=input_args.get("distance_metric", "euclidean"),
+        enforce_detection=input_args.get("enforce_detection", True),
+        align=input_args.get("align", True),
+        anti_spoofing=input_args.get("anti_spoofing", False),
+    )
+
+    if isinstance(find, list):
+        result = [df.to_dict(orient="records") if isinstance(df, pd.DataFrame) else df for df in find]
+    else:
+        result = find.to_dict(orient="records") if isinstance(find, pd.DataFrame) else find
+
+    return result 
