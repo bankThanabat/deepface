@@ -18,7 +18,10 @@ docker build -t deepface .
 
 # run the built image
 # docker run --net="host" deepface
-docker run -p 5005:5000 deepface
+# docker run -p 5005:5000 deepface
+
+#set FACES_DIRECTORY_PATH={path to your faces directory on container}
+docker run -p 5005:5000 --name deepface -v %FACES_DIRECTORY_PATH%:/app/faces deepface
 
 # or pull the pre-built image from docker hub and run it
 # docker pull serengil/deepface

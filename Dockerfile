@@ -6,6 +6,7 @@ LABEL org.opencontainers.image.source https://github.com/serengil/deepface
 # create required folder
 RUN mkdir /app
 RUN mkdir /app/deepface
+RUN mkdir -p /app/faces
 
 # -----------------------------------
 # switch to application directory
